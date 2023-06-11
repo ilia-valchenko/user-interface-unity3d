@@ -8,9 +8,14 @@ public class Target : MonoBehaviour
     private const float XRange = 4.0f;
     private const float YSpawnPosition = 0.0f;
 
+    private GameManager _gameManager;
+
+    public int scoreValue;
+
     // Start is called before the first frame update
     void Start()
     {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         var rigidBody = GetComponent<Rigidbody>();
         rigidBody.AddForce(this.GetRandomForceVector(), ForceMode.Impulse);
         rigidBody.AddTorque(this.GetRandomTorque(), this.GetRandomTorque(), this.GetRandomTorque(), ForceMode.Impulse);
@@ -20,7 +25,6 @@ public class Target : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     private Vector3 GetRandomForceVector()
@@ -41,6 +45,7 @@ public class Target : MonoBehaviour
     private void OnMouseDown()
     {
         Destroy(gameObject);
+        _gameManager.UpdateScore(this.scoreValue);
     }
 
     //private void OnMouseUp()
