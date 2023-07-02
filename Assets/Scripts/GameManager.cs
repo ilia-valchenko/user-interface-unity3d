@@ -7,9 +7,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private const float SpawnRate = 1;
-
     private int _scoreValue = 0;
+    private float _spawnRate = 1;
     private GameObject _startGameScreen;
 
     public List<GameObject> targets;
@@ -35,8 +34,18 @@ public class GameManager : MonoBehaviour
         this.scoreLabel.text = $"Score: {_scoreValue}";
     }
 
-    public void StartGame()
+    public void StartGame(int difficulty)
     {
+        if (difficulty >= 1)
+        {
+            _spawnRate /= difficulty;
+        }
+        else
+        {
+            // TODO: Add logging.
+            Debug.LogWarning("The difficulty value which was provided is less than 1.");
+        }
+
         this.isGameActive = true;
         StartCoroutine(SpawnTarget());
         this.UpdateScore(0);
@@ -59,7 +68,7 @@ public class GameManager : MonoBehaviour
     {
         while (this.isGameActive)
         {
-            yield return new WaitForSeconds(SpawnRate);
+            yield return new WaitForSeconds(_spawnRate);
             int randomIndex = Random.Range(0, this.targets.Count);
             Instantiate(this.targets[randomIndex]);
         }
