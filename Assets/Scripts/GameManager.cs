@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour
     private int _scoreValue = 0;
     private int _lives;
     private float _spawnRate = 1;
+    private bool _paused;
     private GameObject _startGameScreen;
 
+    public GameObject _pauseScreen;
     public List<GameObject> targets;
     public TextMeshProUGUI scoreLabel;
     public TextMeshProUGUI livesLabel;
@@ -31,6 +33,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Check if the user has pressed the P key.
+        if (Input.GetKeyDown(KeyCode.P) && this.isGameActive)
+        {
+            ChangePaused();
+        }
     }
 
     public void UpdateScore(int scoreToAdd)
@@ -78,6 +85,24 @@ public class GameManager : MonoBehaviour
         if (_lives <= 0)
         {
             this.GameOver();
+        }
+    }
+
+    public void ChangePaused()
+    {
+        if (!_paused)
+        {
+            _paused = true;
+            _pauseScreen.SetActive(true);
+            // Setting the Time.timeScale to 0 makes it so that physics calculations are paused.
+            Time.timeScale = 0;
+        }
+        else
+        {
+            _paused = false;
+            _pauseScreen.SetActive(false);
+            // // Setting the Time.timeScale to 0 makes it so that physics calculations are paused.
+            Time.timeScale = 1;
         }
     }
 
