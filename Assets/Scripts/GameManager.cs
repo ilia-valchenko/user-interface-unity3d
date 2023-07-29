@@ -7,12 +7,17 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    private const int InitialScoreValue = 0;
+    private const int InitialNumberOfLives = 3;
+
     private int _scoreValue = 0;
+    private int _lives;
     private float _spawnRate = 1;
     private GameObject _startGameScreen;
 
     public List<GameObject> targets;
     public TextMeshProUGUI scoreLabel;
+    public TextMeshProUGUI livesLabel;
     public GameObject gameOverText;
     public Button restartButton;
     public bool isGameActive = true;
@@ -48,7 +53,8 @@ public class GameManager : MonoBehaviour
 
         this.isGameActive = true;
         StartCoroutine(SpawnTarget());
-        this.UpdateScore(0);
+        this.UpdateScore(InitialScoreValue);
+        this.UpdateLives(InitialNumberOfLives);
         _startGameScreen.SetActive(false);
     }
 
@@ -62,6 +68,17 @@ public class GameManager : MonoBehaviour
         this.isGameActive = false;
         this.restartButton.gameObject.SetActive(true);
         this.gameOverText.SetActive(true);
+    }
+
+    public void UpdateLives(int livesToChange)
+    {
+        _lives += livesToChange;
+        livesLabel.text = $"Lives: {_lives}";
+
+        if (_lives <= 0)
+        {
+            this.GameOver();
+        }
     }
 
     private IEnumerator SpawnTarget()
